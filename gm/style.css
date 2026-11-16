@@ -1,0 +1,2123 @@
+/* Each preset is a class on the body. The tokens are set on the body, not
+   on :root, so that tokens made of others, such as --link, follow a
+   preset's change to the ones they are made of. */
+
+body {
+  color-scheme: dark;
+  --bg: #261d30;
+  --surface: #352a40;
+  --border: #463953;
+  --muted: #a99bb7;
+  --text-muted: #b4a7bf;
+  --text: #ecdfea;
+  --accent: #93aad8;
+  --quoted: #a9c49a;
+  --corrected: #f2c784;
+  --written: #8ccfc8;
+  --generated: #ec8ca0;
+  --event: #c9a3e3;
+  --place: var(--accent);
+  --person: var(--generated);
+  --group: var(--quoted);
+  --creature: var(--written);
+  --thing: var(--corrected);
+  --link: var(--accent);
+  --gm: var(--event);
+  --text-fallback: -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+  --title-fallback: var(--text-fallback);
+  --text-font: var(--text-fallback);
+  --title-font: var(--title-fallback);
+  --title-weight: 700;
+  --box-head: var(--border);
+  --box-head-text: var(--text);
+  --stripe: rgb(255 255 255 / 4%);
+  --rule: var(--text-muted);
+  --opener: #000;
+  --opener-text: #fff;
+  --head-bar: 3px;
+}
+
+/* Ruin: the books' own look, near-black ink on paper white with grey
+   stripes, and their black pages as the dark scheme */
+
+body.preset-ruin {
+  color-scheme: light;
+  --bg: #fdfcfa;
+  --surface: #f1f1f2;
+  --border: #d1d2d4;
+  --muted: #625d5e;
+  --text-muted: #4d4849;
+  --text: #231f20;
+  --accent: #231f20;
+  --link: #231f20;
+  --quoted: #4f7a3a;
+  --corrected: #b07a12;
+  --written: #1f7f78;
+  --generated: #b8435a;
+  --event: #7a4fa0;
+  --place: #2f5e9e;
+  --text-fallback: "Gill Sans", "Trebuchet MS", "Segoe UI", sans-serif;
+  --title-fallback: Impact, "Arial Narrow", "Helvetica Neue", sans-serif;
+  --text-font: "Alegreya Sans", var(--text-fallback);
+  --title-font: "Anton", var(--title-fallback);
+  --title-weight: 400;
+  --box-head: #231f20;
+  --box-head-text: #ffffff;
+  --stripe: #e6e7e8;
+  --rule: #231f20;
+  --opener: #231f20;
+  --opener-text: #ffffff;
+  --head-bar: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.preset-ruin {
+    color-scheme: dark;
+    --bg: #171415;
+    --surface: #231f20;
+    --border: #3d3839;
+    --muted: #a29d9e;
+    --text-muted: #c9c6c6;
+    --text: #f1f1f2;
+    --accent: #e6e7e8;
+    --link: #f1f1f2;
+    --quoted: #a9c49a;
+    --corrected: #f2c784;
+    --written: #8ccfc8;
+    --generated: #ec8ca0;
+    --event: #c9a3e3;
+    --place: #93aad8;
+    --box-head: #e6e7e8;
+    --box-head-text: #231f20;
+    --stripe: rgb(255 255 255 / 6%);
+    --rule: #e6e7e8;
+    --opener: #000000;
+  }
+}
+
+/* Gothic: parchment, deep red and black, with a blackletter face for the
+   titles only */
+
+body.preset-gothic {
+  color-scheme: light;
+  --bg: #f4ecd8;
+  --surface: #eadfc4;
+  --border: #cdb98f;
+  --muted: #6b574a;
+  --text-muted: #4a3b33;
+  --text: #1d1512;
+  --accent: #8b1a1a;
+  --link: #8b1a1a;
+  --quoted: #4a6b2a;
+  --corrected: #94650a;
+  --written: #1f6b66;
+  --generated: #9c2b45;
+  --event: #5e3a8a;
+  --place: #8b1a1a;
+  --person: #2f4f7a;
+  --text-fallback: Georgia, "Times New Roman", serif;
+  --title-fallback: Georgia, "Times New Roman", serif;
+  --text-font: "EB Garamond", var(--text-fallback);
+  --title-font: "UnifrakturMaguntia", var(--title-fallback);
+  --title-weight: 400;
+  --box-head: #7a1616;
+  --box-head-text: #f4ecd8;
+  --stripe: rgb(120 80 30 / 9%);
+  --rule: #7a1616;
+  --opener: #120c0a;
+  --opener-text: #f4ecd8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 var(--text-font);
+}
+
+h1, .site-title { font-family: var(--title-font); font-weight: var(--title-weight); }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Links inside running text are underlined faintly, so colour is not the
+   only thing that tells them from the text around them */
+:is(.body p, .body .facts li, .infobox td, .notes li, main.changes li, .index-entries li) a {
+  text-decoration: underline 1px color-mix(in srgb, var(--accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+:is(.body p, .body .facts li, .infobox td, .notes li, main.changes li, .index-entries li) a:hover {
+  text-decoration-color: var(--accent);
+}
+:is(.body p, .body .facts li, .infobox td, .book-table figcaption) sup.note-mark a { text-decoration: none; }
+
+/* Skip link: off screen until the keyboard reaches it */
+.skip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 50;
+  padding: 6px 12px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* A focus ring on anything the keyboard reaches that has none of its own */
+:is(a, summary, select, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* Sidebar */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 22px 18px;
+  font-size: 14px;
+}
+
+.sidebar .site-title {
+  display: block;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: var(--title-weight);
+  margin-bottom: 14px;
+}
+
+/* Search box: hidden until its script shows it, with results over the tree */
+
+.search { position: relative; margin-bottom: 14px; }
+
+.search input {
+  width: 100%;
+  padding: 7px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+}
+.search input::placeholder { color: var(--muted); }
+.search input::-webkit-search-cancel-button { filter: grayscale(1); }
+.search input:focus { outline: none; border-color: var(--accent); }
+
+.search-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  max-height: 72vh;
+  overflow-y: auto;
+  margin-top: 4px;
+  padding: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+}
+.search-panel.open { display: block; }
+.search .filters { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 4px 4px; }
+.search .filters:empty { display: none; }
+.search .filters button {
+  padding: 1px 8px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.search .filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.sidebar .search .results { margin: 0; padding: 0; border: 0; list-style: none; }
+.sidebar .search .results a { margin: 0; padding: 6px 8px; border-radius: 4px; }
+.sidebar .search .results a:hover, .sidebar .search .results .on a {
+  background: var(--surface);
+  text-decoration: none;
+  outline: none;
+}
+.search .results strong { display: block; color: var(--text); font-weight: 600; }
+.search .results .kind { display: block; color: var(--accent); font-size: 11.5px; }
+.search .results span { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+.search .results .excerpt {
+  display: -webkit-box;
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--text-muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+.search .results mark { background: none; color: var(--text); font-weight: 600; }
+.search .results .empty { padding: 6px 8px; color: var(--muted); }
+.search .more { margin: 2px 8px 4px; color: var(--muted); font-size: 12px; }
+.search .more:empty { display: none; }
+
+.sidebar .navlink {
+  display: block;
+  color: var(--text-muted);
+  padding: 4px 6px;
+  margin: 0 -6px 2px;
+  border-radius: 4px;
+}
+/* "Group by": a select its script shows, over one tree per grouping */
+
+.sidebar .group-by {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+.sidebar .group-by[hidden] { display: none; }
+.sidebar .group-by select {
+  flex: 1;
+  min-width: 0;
+  appearance: none;
+  padding: 4px 26px 4px 8px;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 55%, calc(100% - 9px) 55%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sidebar .group-by option { background: var(--bg); color: var(--text); }
+.sidebar .group-by select:focus { outline: none; border-color: var(--accent); }
+
+.sidebar .tree { margin-top: 10px; }
+
+.sidebar details { margin: 2px 0; }
+.sidebar li details { margin: 0; }
+
+.sidebar summary {
+  position: relative;
+  cursor: pointer;
+  color: var(--text-muted);
+  list-style: none;
+  padding: 2px 0;
+}
+.sidebar summary::-webkit-details-marker { display: none; }
+.sidebar summary::before { content: "▸ "; color: var(--muted); font-size: 11px; }
+.sidebar details[open] > summary::before { content: "▾ "; }
+
+.sidebar .count { color: var(--muted); font-size: 12px; float: right; }
+
+.sidebar ul {
+  list-style: none;
+  margin: 2px 0 8px 4px;
+  padding: 0 0 0 12px;
+  border-left: 1px solid var(--border);
+}
+
+.sidebar li a { display: block; color: var(--text-muted); padding: 2px 6px; margin: 0 -6px; }
+.sidebar li > details > ul { margin-bottom: 4px; }
+
+/* An entry with entries under it: its link lies over the summary's title,
+   which is there for screen readers only, so the summary itself holds no
+   link and a click on the arrow still opens and closes the branch */
+.sidebar .entry-branch { position: relative; }
+.sidebar .entry-branch > .branch-link {
+  position: absolute;
+  top: 2px;
+  left: 11px;
+  right: 30px;
+  z-index: 1;
+  line-height: inherit;
+  pointer-events: none;
+}
+.sidebar .entry-branch > .branch-link > a {
+  display: inline-block;
+  max-width: 100%;
+  margin: 0 -4px;
+  padding: 0 4px;
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: top;
+  pointer-events: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sidebar a.on {
+  color: var(--text);
+  font-weight: 600;
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* Main column */
+
+main {
+  position: relative;
+  padding: 26px 46px 60px;
+  max-width: 1040px;
+}
+
+/* Running head: a bar fading out across the top of an entry's page, under
+   it the entry's kind and books, as the books name the chapter */
+
+.running-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px 22px;
+  margin: 0 0 18px;
+  padding-top: 8px;
+  border-style: solid;
+  border-width: var(--head-bar) 0 0;
+  border-image: linear-gradient(to right, var(--rule), transparent) 1;
+}
+.running-title {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.running-kind { color: var(--text-muted); font-weight: 700; }
+.running-book::before { content: "· "; }
+.running-head { position: relative; flex-wrap: nowrap; }
+.running-head .legend {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  justify-content: flex-end;
+}
+
+h1 { font-size: 34px; line-height: 1.2; margin: 2px 0; }
+h2 { font-size: 22px; margin: 28px 0 8px; }
+h3, h4, h5, h6 { font-size: 18px; margin: 22px 0 6px; }
+
+.crumbs { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+.crumbs a { color: var(--text-muted); }
+
+.description {
+  color: var(--text-muted);
+  font-size: 17px;
+  margin: 4px 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.body::after { content: ""; display: block; clear: both; }
+
+.body p {
+  margin: 0 0 14px;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 7 3 3;
+}
+
+.main { color: var(--text-muted); }
+
+/* Infobox: the books' fact box, a head bar naming the entry over striped
+   rows, with room under the bar for the entry's picture. It sits above the
+   text's paragraphs, which are positioned for the hover box and would
+   otherwise cover the infobox's links */
+
+.infobox {
+  position: relative;
+  z-index: 1;
+  float: right;
+  width: 290px;
+  margin: 0 0 20px 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+.infobox-head {
+  margin: 0;
+  padding: 7px 12px 6px;
+  background: var(--box-head);
+  color: var(--box-head-text);
+  font-family: var(--title-font);
+  font-weight: var(--title-weight);
+  font-size: 15px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.infobox-picture { margin: 0; padding: 8px 8px 0; }
+.infobox-picture img { display: block; width: 100%; height: auto; }
+.infobox-picture figcaption { padding: 5px 4px 0; color: var(--text-muted); font-size: 13px; font-style: italic; text-align: center; }
+.infobox-picture:last-of-type { padding-bottom: 8px; }
+.map-link { display: block; }
+.map-link .point { pointer-events: none; }
+.infobox table { width: 100%; border-collapse: collapse; }
+.infobox tr:nth-child(even) { background: var(--stripe); }
+.infobox th, .infobox td {
+  padding: 6px 12px;
+  vertical-align: top;
+  text-align: left;
+}
+.infobox th { color: var(--muted); font-weight: 400; width: 40%; }
+
+sup.note-mark { font-size: 11px; line-height: 0; }
+sup.note-mark a { color: var(--muted); }
+sup.note-mark a:is(:hover, :focus-visible) { color: var(--accent); }
+
+/* A note mark's note, shown in the description box under its line on hover
+   or keyboard focus, so a reader sees where text comes from without leaving
+   it. A device that cannot hover follows the mark to the notes instead */
+
+.note-tip { display: none; }
+
+.connections-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  clear: both;
+}
+.connections-top .show-in-graph { margin-left: auto; color: var(--text-muted); font-size: 13px; }
+.connections-top .show-in-graph:hover { color: var(--accent); }
+
+.connections { font-size: 14px; margin: 0; }
+.connections div {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.connections dt { color: var(--muted); }
+.connections dd { margin: 0; }
+.connections .muted dd, .connections .note { color: var(--muted); font-style: italic; }
+.connections .muted a { color: var(--muted); }
+
+.notes {
+  margin-top: 28px;
+  padding: 12px 0 0 22px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.notes li:target { color: var(--text); }
+
+/* The entry's last change, a quiet line at the foot of its page */
+
+.last-changed { margin: 22px 0 0; color: var(--muted); font-size: 12.5px; }
+.last-changed a { color: var(--text-muted); }
+
+/* Contents box: in the text column after the lead, beside the infobox */
+
+.contents {
+  display: flow-root;
+  width: fit-content;
+  min-width: 220px;
+  max-width: 100%;
+  margin: 4px 0 18px;
+  padding: 8px 16px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.contents summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 600;
+  list-style: none;
+}
+.contents summary::-webkit-details-marker { display: none; }
+.contents summary::after { content: " ▸"; color: var(--muted); font-size: 11px; }
+.contents details[open] > summary::after { content: " ▾"; }
+.contents ul { list-style: none; margin: 6px 0 0; padding: 0; }
+.contents li { padding: 2px 0; }
+.contents .depth-1 { padding-left: 14px; }
+.contents .depth-2 { padding-left: 28px; }
+.contents :is(.depth-3, .depth-4) { padding-left: 42px; }
+
+/* Descriptions on hover: a link's box under its line, inside the block
+   that holds the link, so it stays in the column and never moves text */
+
+.body p, .infobox td, .book-table figcaption, .connections dd, .crumbs, .sidebar li, .start .entries li, .changes li {
+  position: relative;
+}
+
+[data-description]:hover::after,
+main:has(.provenance-toggle:checked) .segment.corrected:is(:hover, :focus) > .book,
+.note-mark:is(:hover, :focus-within) > .note-tip {
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  z-index: 20;
+  width: max-content;
+  max-width: min(340px, 100%);
+  margin-top: 1.7em;
+  padding: 7px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+  color: var(--text);
+  font: 400 13px/1.45 var(--text-font);
+  font-style: normal;
+  text-decoration: none;
+  white-space: normal;
+  pointer-events: none;
+}
+[data-description]:hover::after { content: attr(data-description); }
+.note-mark:is(:hover, :focus-within) > .note-tip { display: block; line-height: 1.45; }
+.body p .note-mark > .note-tip { left: 12px; max-width: min(340px, calc(100% - 12px)); }
+@media (hover: none) {
+  .note-mark:is(:hover, :focus-within) > .note-tip { display: none; }
+}
+
+.sidebar a[data-description]:hover::after { max-width: 100%; }
+.body p [data-description]:hover::after { left: 12px; max-width: min(340px, calc(100% - 12px)); }
+.switch[data-description]:hover::after { left: auto; right: 0; top: 100%; margin-top: 6px; width: 280px; max-width: none; }
+
+/* Page previews: the card previews.js shows on a link to an entry. Once the
+   script has the cards, it adds `previews` to <html> and the card takes the
+   place of the description box above */
+
+.previews a[data-description]:hover::after { content: none; }
+
+.page-preview {
+  position: absolute;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  max-width: calc(100vw - 16px);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+  animation: page-preview-in 120ms ease-out;
+}
+.page-preview.above { animation-name: page-preview-in-above; }
+/* The card of a map's mark that links nothing holds only its name, and is
+   as wide as the name */
+.page-preview.page-preview-name { width: max-content; max-width: min(340px, calc(100vw - 16px)); }
+.page-preview-name .page-preview-title { margin: 0; }
+/* The entry's lead picture, full width at a fixed height, before the text */
+.page-preview-picture {
+  display: block;
+  flex: none;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: var(--border);
+}
+.page-preview-text { padding: 10px 14px 12px; }
+.page-preview p { margin: 0; }
+.page-preview-type { color: var(--muted); font-size: 12px; }
+.page-preview-type::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--kind, var(--muted));
+}
+.page-preview-title { font-size: 16px; font-weight: 700; line-height: 1.3; margin: 2px 0 4px; }
+.page-preview-description { color: var(--text-muted); }
+.page-preview-description + .page-preview-lines {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+@keyframes page-preview-in { from { opacity: 0; transform: translateY(3px); } }
+@keyframes page-preview-in-above { from { opacity: 0; transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .page-preview { animation: none; } }
+
+/* Provenance switch: a checkbox before main, drawn as a switch by its label */
+
+.provenance-toggle { position: absolute; opacity: 0; pointer-events: none; }
+
+.provenance {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px 22px;
+  min-height: 20px;
+  margin: 0;
+}
+
+.switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+.switch::before {
+  content: "";
+  width: 28px;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--border);
+  box-shadow: inset 0 0 0 1px var(--muted);
+  transition: background .15s;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform .15s;
+}
+/* Each switch follows the checkbox before it, so a page may have two */
+:is(.provenance-toggle, .visibility-toggle):checked ~ .switch { color: var(--text); }
+:is(.provenance-toggle, .visibility-toggle):checked ~ .switch::before { background: var(--accent); }
+:is(.provenance-toggle, .visibility-toggle):checked ~ .switch::after { transform: translateX(12px); background: var(--bg); }
+:is(.provenance-toggle, .visibility-toggle):focus-visible ~ .switch { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  visibility: hidden;
+}
+.legend li::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 12px;
+  margin-right: 6px;
+  vertical-align: -1px;
+  border-radius: 2px;
+  background: var(--kind);
+}
+:is(.provenance-toggle, .visibility-toggle):checked ~ .legend { visibility: visible; }
+.legend li { cursor: default; }
+.legend li:focus { outline: none; }
+.legend li:focus-visible { outline: 1px dashed var(--kind); outline-offset: 3px; }
+
+/* The switch between the layers of a site with layers: two halves,
+   players and game master, the page's own layer filled and the other a
+   link to the same page in it. The game master half is marked in the
+   colour of game master text. It sits under the site's title in the
+   sidebar, and on a phone in the top bar. */
+
+.layer-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.layer-switch-label { color: var(--muted); white-space: nowrap; }
+.layer-switch .layers {
+  display: flex;
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.layer-switch .layer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.layer-switch .layer.gm::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gm);
+}
+.layer-switch a.layer:hover { background: var(--border); color: var(--text); text-decoration: none; }
+.layer-switch a.layer:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.layer-switch .layer.on { color: var(--text); font-weight: 600; background: var(--border); }
+.layer-switch .layer.gm.on { color: var(--bg); background: var(--gm); }
+.layer-switch .layer.gm.on::before { background: var(--bg); }
+.layer-switch.gm .layers { border-color: var(--gm); }
+.sidebar .layer-switch { margin-bottom: 14px; }
+.topbar .layer-switch { margin-left: auto; }
+.topbar .layer-switch-label { display: none; }
+.topbar .layer-switch .layer { padding: 4px 8px; }
+body.preset-ruin .layer-switch .layers { border-radius: 0; }
+
+/* On a game master page the public layer does not have, a notice that
+   players cannot see it: at the top of a page with no visibility switch,
+   and on an entry's page a tag tinted in the game master colour beside the
+   title, shown only while the switch is on. The title's line is no taller
+   for it unless a long title leaves it no room. */
+
+.gm-only {
+  margin: 0 0 18px;
+  padding: 8px 12px;
+  border-left: 4px solid var(--gm);
+  background: color-mix(in srgb, var(--gm) 14%, var(--bg));
+  color: var(--text);
+  font-size: 14px;
+}
+.title-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 18px;
+}
+.gm-only-tag {
+  display: none;
+  max-width: 17em;
+  margin: 0;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--gm) 24%, transparent);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.35;
+}
+main:has(.visibility-toggle:checked) .gm-only-tag:not([hidden]) { display: block; }
+body.preset-ruin .gm-only-tag { border-radius: 0; }
+
+/* The visibility view on a game master page: a switch like the provenance
+   one that marks the text only the game master may read, and shows each
+   public piece a game master piece overrules, struck through, where the
+   game master layer shows the other in its place. It marks as the
+   provenance view does, in the game master colour: a bar beside a
+   paragraph, a heading or the description that is all game master text, a
+   dotted bar beside a paragraph that mixes public and game master text and
+   a line under each of its game master segments, and under an infobox
+   value or a connection only the game master layer has. With both
+   switches on its bar sits outside the provenance bar and its line under
+   the provenance line, so neither draws over the other. A picture or table
+   only the game master layer shows has the bar just outside its left
+   edge, since a preset may draw it with no frame. */
+
+.visibility-toggle { position: absolute; opacity: 0; pointer-events: none; }
+.visibility-view {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px 22px;
+  min-height: 20px;
+}
+.running-head:has(.provenance-toggle:checked) .visibility-legend { top: calc(100% + 22px); }
+.visibility-legend .public::before { background: transparent; box-shadow: inset 0 0 0 1px var(--border); }
+.visibility-legend .gm { --kind: var(--gm); }
+.visibility-legend .overruled { color: var(--muted); text-decoration: line-through; }
+.visibility-legend .overruled::before { content: none; }
+/* A bar is 35px left of the text, 20px outside the provenance bar, and
+   a picture's or table's 8px outside its frame */
+main:has(.visibility-toggle:checked) :is(.body > :is(p, h2, h3, h4, h5, h6):is(.gm, .part-gm), p.description.gm, figure.gm) {
+  position: relative;
+}
+main:has(.visibility-toggle:checked) :is(.body > :is(p, h2, h3, h4, h5, h6):is(.gm, .part-gm), p.description.gm, figure.gm)::before {
+  content: "";
+  position: absolute;
+  left: -23px;
+  top: 3px;
+  bottom: 3px;
+  border-left: 3px solid var(--gm);
+}
+main:has(.visibility-toggle:checked) p.description.gm::before { left: -35px; bottom: 15px; }
+main:has(.visibility-toggle:checked) figure.gm::before { left: -11px; }
+main:has(.visibility-toggle:checked) .body > p.part-gm::before { border-left-style: dotted; border-left-color: var(--muted); }
+main:has(.visibility-toggle:checked) :is(:is(.body > p.part-gm, .infobox) .segment.gm, .connections a.gm) {
+  padding-bottom: 4px;
+  background: linear-gradient(var(--gm), var(--gm)) left bottom / 100% 2px no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+main:has(.visibility-toggle:checked):has(.provenance-toggle:checked) :is(.body > p.part-gm.mixed, .infobox) .segment.gm {
+  padding-bottom: 11px;
+}
+del.overruled, .overruled-piece { display: none; }
+main:has(.visibility-toggle:checked) del.overruled { display: inline; }
+main:has(.visibility-toggle:checked) .overruled-piece { display: revert; }
+main:has(.visibility-toggle:checked) :is(del.overruled, .overruled-piece) {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+/* Hovering a kind in the legend, or reaching it by keyboard, fades the
+   text of every other kind: a block of one other kind whole, and in a
+   paragraph that mixes kinds, or in the infobox, each other segment or
+   value. The legend is hidden while the switch is off, so it takes no
+   hover then. */
+
+.body > :is(p, h2, h3, h4, h5, h6), .segment { transition: opacity .15s; }
+@media (prefers-reduced-motion: reduce) {
+  .body > :is(p, h2, h3, h4, h5, h6), .segment { transition: none; }
+}
+main:has(.legend .quoted:is(:hover, :focus-visible)) :is(.body > :is(p, h2, h3, h4, h5, h6):not(.mixed), :is(.mixed, .infobox) .segment):not(.quoted),
+main:has(.legend .corrected:is(:hover, :focus-visible)) :is(.body > :is(p, h2, h3, h4, h5, h6):not(.mixed), :is(.mixed, .infobox) .segment):not(.corrected),
+main:has(.legend .written:is(:hover, :focus-visible)) :is(.body > :is(p, h2, h3, h4, h5, h6):not(.mixed), :is(.mixed, .infobox) .segment):not(.written),
+main:has(.legend .generated:is(:hover, :focus-visible)) :is(.body > :is(p, h2, h3, h4, h5, h6):not(.mixed), :is(.mixed, .infobox) .segment):not(.generated) {
+  opacity: .25;
+}
+
+.quoted { --kind: var(--quoted); }
+.corrected { --kind: var(--corrected); }
+.written { --kind: var(--written); }
+.generated { --kind: var(--generated); }
+
+.body p, .body h2, .body h3, .body h4, .body h5, .body h6 {
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+  margin-left: -15px;
+}
+main:has(.provenance-toggle:checked) .body :is(p, h2, h3, h4, h5, h6):is(.quoted, .corrected, .written, .generated) {
+  border-left-color: var(--kind);
+}
+main:has(.provenance-toggle:checked) .body p.mixed { border-left: 3px dotted var(--muted); }
+/* An infobox value, quoted or generated, is underlined in its kind's
+   colour like a segment of a mixed paragraph, since a cell may hold
+   values of both kinds */
+main:has(.provenance-toggle:checked) :is(.body p.mixed, .infobox) .segment {
+  text-decoration: underline 2px var(--kind);
+  text-underline-offset: 5px;
+  text-decoration-skip-ink: none;
+}
+
+/* The book's text of a corrected segment, in the box of a link's
+   description, while the switch is on and not over a link in it. The box
+   is an element at the segment's end, hidden until then, so it is not in
+   the text a reader copies, and placed out of the flow so it moves no
+   text. The words the correction changes are marked, and a caret shows
+   where it adds words. */
+
+.segment.corrected > .book { display: none; }
+.segment.corrected:focus { outline: none; }
+.segment.corrected:focus-visible { outline: 1px dashed var(--corrected); outline-offset: 2px; }
+main:has(.provenance-toggle:checked) .segment.corrected { cursor: help; }
+main:has(.provenance-toggle:checked) .segment.corrected:is(:hover, :focus) > .book {
+  display: inline;
+  left: 12px;
+  max-width: min(340px, calc(100% - 12px));
+}
+main:has(.provenance-toggle:checked) .segment.corrected:has([data-description]:hover) > .book,
+.previews main:has(.provenance-toggle:checked) .segment.corrected:has(a:hover) > .book {
+  display: none;
+}
+.book .book-label { display: block; color: var(--text-muted); }
+.book mark {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--corrected) 30%, transparent);
+  color: var(--text);
+}
+.book mark.missing { padding: 0 1px; color: var(--corrected); background: none; font-weight: 700; }
+
+/* Start page, and a source's page, which lists entries the same way */
+
+/* The start page opens like a chapter: the header picture, the site's name
+   in large capitals and a thick rule under them. The name shrinks until its
+   longest word, `--longest` letters of about `--title-glyph` em each, fits
+   the column, so a narrow screen does not break a word in two; only a word
+   too long even at the smallest size breaks */
+
+.start .opener {
+  --title-glyph: .76;
+  --title-room: 100cqi;
+  container-type: inline-size;
+  position: relative;
+  margin: 0 0 22px;
+  padding-bottom: 10px;
+  border-bottom: 6px solid var(--rule);
+}
+.start .opener h1 {
+  margin: 0;
+  font-size: max(
+    24px,
+    min(
+      clamp(46px, 8vw, 96px),
+      calc(var(--title-room) / (var(--longest, 1) * var(--title-glyph)))
+    )
+  );
+  line-height: .95;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.start .opener.pictured { --title-room: calc(100cqi - 48px); padding: 0; background: var(--opener); }
+.start .opener .header-picture {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 36vw, 380px);
+  object-fit: cover;
+  object-position: center 40%;
+}
+.start .opener.pictured h1 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 70px 24px 14px;
+  background: linear-gradient(transparent, rgb(0 0 0 / 80%));
+  color: var(--opener-text);
+}
+
+.start .kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 30px;
+}
+.start .kinds a {
+  display: block;
+  min-width: 72px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+}
+.start .kinds a:hover { border-color: var(--accent); text-decoration: none; }
+.start .kinds strong { display: block; font-size: 20px; }
+
+/* A source's page opens as a book's record in a catalogue: a label saying
+   it is a source, the title, how many entries draw on it, then rows of
+   what else is known of it, closed by the preset's rule */
+
+.book-head {
+  margin: 0 0 8px;
+  padding-bottom: 14px;
+  border-bottom: 3px solid var(--rule);
+}
+.book-label {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.book-count { margin: 6px 0 12px; color: var(--text-muted); font-size: 17px; }
+.book-record {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: 14px;
+}
+.book-record div { display: contents; }
+.book-record dt { color: var(--muted); }
+.book-record dd { margin: 0; }
+.source-page h3 { font-size: 19px; margin: 22px 0 4px; }
+
+/* A book's box is an infobox with its cover under the head bar. The
+   book's head and its lists of entries narrow beside it */
+
+.source-page :is(.book-head, .book-entries, section) { display: flow-root; }
+
+/* A kind's page */
+
+.entry-list { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+.entry-list th {
+  padding: 6px 10px 6px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 400;
+  text-align: left;
+}
+.entry-list td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+.entry-list td:nth-child(2) { color: var(--text-muted); white-space: nowrap; }
+.entry-list .number { text-align: right; padding-right: 0; color: var(--text-muted); }
+.entry-list td a { font-size: 16px; }
+.entry-list td span { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.45; }
+
+.sidebar .kind-branch { position: relative; }
+.sidebar .kind-branch > .kind-link {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0 2px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.sidebar .kind-branch > details > summary .count { margin-right: 20px; }
+.sidebar .kind-branch > .kind-link:hover, .sidebar .kind-branch > .kind-link.on {
+  color: var(--accent);
+  background: none;
+  text-decoration: none;
+}
+
+.start .columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 34px;
+}
+:is(.start, .source-page) h2 {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+:is(.start, .source-page) ul.entries, .start ul.sources { list-style: none; padding: 0; margin: 0; }
+:is(.start, .source-page) .entries li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+:is(.start, .source-page) .entries a { display: block; font-size: 17px; }
+:is(.start, .source-page) .entries span { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.45; }
+.source-page .session-report { margin: 6px 0; font-size: 17px; }
+.source-page .entries .pages { float: right; margin-left: 12px; color: var(--muted); line-height: 1.6; }
+.start .sources li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.start .sources .count { color: var(--muted); }
+.start .sources li { align-items: center; gap: 10px; }
+.start .sources .book-thumb { flex: none; width: 30px; height: auto; border: 1px solid var(--border); }
+.start .sources .book-name { flex: 1; min-width: 0; }
+.start .sources .byline { display: block; color: var(--muted); font-size: 12px; }
+
+/* Game reports: the day played under the title, the sessions around it at
+   the foot, and the lists of reports on the sessions page and start page */
+
+.played { color: var(--muted); font-size: 13px; margin: 2px 0 16px; }
+.session-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: start;
+  margin: 28px 0 0;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+.session-nav span { display: block; color: var(--muted); font-size: 12px; }
+.session-nav .all { align-self: center; font-size: 13px; }
+.session-nav .next { text-align: right; }
+ol.reports { margin: 0; padding: 0 0 0 1.6em; }
+ol.reports li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+ol.reports li::marker { color: var(--muted); font-size: 13px; }
+ol.reports a { font-size: 17px; }
+ol.reports .day { margin-left: 10px; color: var(--muted); font-size: 13px; }
+ol.reports p, .sessions-page .campaign p { margin: 2px 0 0; color: var(--text-muted); font-size: 13.5px; line-height: 1.45; }
+.start .latest-sessions { margin: 0 0 30px; }
+.start .latest-sessions ol.reports { list-style: none; padding: 0; }
+.start .latest-sessions h2 a { color: inherit; }
+.sessions-page .campaign { margin: 0 0 24px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 6px; }
+.sessions-page .campaign h2 { margin: 0 0 4px; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
+.sessions-page .campaign a { font-size: 19px; }
+
+/* Changes page */
+
+.changes h2 { font-size: 18px; margin: 26px 0 6px; }
+.changes ul { margin: 0; padding: 0; list-style: none; }
+.changes li { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+
+/* Index: every entry by title, under letters with jump links at the top,
+   below the phone's top bar where it has one */
+
+.index-page .description { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
+.index-page .letters {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0 0 8px;
+  padding: 8px 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.index-page .letters a, .index-page .letters span {
+  min-width: 26px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+.index-page .letters a:hover { background: var(--surface); text-decoration: none; }
+.index-page .letters span { color: var(--border); font-weight: 400; }
+.index-page h2 {
+  scroll-margin-top: 56px;
+  color: var(--text-muted);
+  font-size: 13px;
+  letter-spacing: .1em;
+  margin: 24px 0 4px;
+}
+.index-entries { list-style: none; padding: 0; margin: 0; }
+.index-entries li { padding: 7px 0; border-bottom: 1px solid var(--border); }
+.index-entries a { font-size: 16px; }
+.index-kind { color: var(--muted); font-size: 12.5px; margin-left: 6px; }
+.index-kind::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--kind);
+}
+.index-description { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.45; }
+@media (max-width: 760px) {
+  .index-page .letters { top: 48px; }
+  .index-page h2 { scroll-margin-top: 104px; }
+}
+
+/* Graph: the graph page and the start page's preview */
+
+.kind-place { --kind: var(--place); }
+.kind-person { --kind: var(--person); }
+.kind-group { --kind: var(--group); }
+.kind-creature { --kind: var(--creature); }
+.kind-thing { --kind: var(--thing); }
+.kind-event { --kind: var(--event); }
+.kind-session, .kind-campaign { --kind: var(--muted); }
+
+.graph svg { display: block; width: 100%; height: 100%; }
+.graph .edge { stroke: var(--border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.graph .edge.muted { stroke-dasharray: 3 3; }
+.graph .edge.on { stroke: var(--text-muted); stroke-width: 1.5; }
+.graph .node { fill: var(--kind); cursor: pointer; vector-effect: non-scaling-stroke; }
+.graph .node.on { stroke: var(--text); stroke-width: 2.5; }
+/* With the keyboard in the graph, the graph gets an outline and the
+   selected entry a ring in the text colour with a glow in the accent's, so
+   it shows on an entry of any kind's colour */
+.graph svg:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.graph svg:focus-visible .node.on {
+  stroke: var(--text);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 3px var(--accent)) drop-shadow(0 0 6px var(--accent));
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.graph text { fill: var(--text-muted); font-size: 12px; pointer-events: none; }
+.graph-page .graph text { paint-order: stroke; stroke: var(--bg); stroke-linejoin: round; }
+.graph .faded { opacity: .15; }
+.graph .edge.faded { opacity: .25; }
+.graph .hidden, .graph text:not(.shown) { display: none; }
+.graph .node, .graph .edge, .graph text { transition: opacity .15s; }
+
+.graph-view { position: relative; }
+/* The graph script sets the box's height to the drawing's; these bound it */
+.graph-page .graph {
+  height: calc(100vh - 230px);
+  max-height: calc(100vh - 230px);
+  min-height: 360px;
+  touch-action: none;
+}
+.graph-page .graph svg { cursor: grab; }
+.graph-page .graph svg:active { cursor: grabbing; }
+
+.graph-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.graph-legend li::before, .graph-legend button::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--kind);
+  box-shadow: inset 0 0 0 1.5px var(--kind);
+}
+.graph-legend button {
+  padding: 2px 4px;
+  margin: 0 -4px;
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.graph-legend button:hover { color: var(--text); }
+.graph-legend button[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; }
+.graph-legend button[aria-pressed="false"]::before { background: transparent; }
+
+.graph-fit {
+  padding: 3px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.graph-fit:hover { color: var(--text); border-color: var(--muted); }
+
+.graph-find { margin-left: auto; }
+.graph-find[hidden] { display: none; }
+.graph-find input {
+  width: 200px;
+  padding: 3px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.graph-find input::placeholder { color: var(--muted); }
+.graph-find input:focus { outline: none; border-color: var(--accent); }
+
+.graph-panel .graph-near {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.graph-panel .graph-near input { margin: 0; accent-color: var(--accent); }
+
+.graph-panel {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  width: 250px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.graph-panel .graph-title { display: block; color: var(--text); font-size: 15px; font-weight: 700; }
+.graph-panel .graph-meta { color: var(--muted); }
+.graph-panel p { margin: 6px 0; }
+.graph-panel p:empty { display: none; }
+
+.start .start-top { display: flex; gap: 30px; justify-content: space-between; align-items: flex-start; }
+.graph-preview {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: right;
+}
+.graph-preview .graph { height: 160px; pointer-events: none; }
+.graph-preview .edge { stroke: var(--muted); stroke-opacity: .45; }
+
+/* Pictures */
+
+/* Every picture on an entry's page sits in a frame of the infobox's
+   colours, so it reads as part of the page rather than pasted on it, with
+   a caption set small in the text's face */
+.picture {
+  box-sizing: border-box;
+  margin: 0 0 20px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.picture img { display: block; max-width: 100%; height: auto; border-radius: 2px; }
+.picture:is(.lead, .thumb) .zoom, .picture:is(.lead, .thumb) .zoom img { width: 100%; }
+.picture figcaption {
+  padding: 6px 3px 1px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.picture.lead { float: right; clear: right; width: 290px; margin: 0 0 20px 28px; }
+/* A picture beside the paragraph nearest it in the book, as a thumbnail on
+   Wikipedia, under the infobox if they meet. Its top lines up with the
+   paragraph's first line */
+.picture.thumb { float: right; clear: right; width: 250px; margin: 5px 0 14px 24px; }
+.body .picture p { margin: 0; padding-left: 0; border-left: 0; text-align: left; }
+.picture .open-map { padding: 6px 3px 1px; }
+.pictures { clear: both; }
+.pictures .picture { max-width: 640px; }
+
+/* An entry's tables from the book, after the paragraph each goes with or
+   in a section after the text, each in a box under its caption, whose
+   note names its book and pages */
+.tables { clear: both; }
+.book-table {
+  max-width: 640px;
+  margin: 12px 0 16px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.book-table figcaption { color: var(--text); font-size: 0.935em; font-weight: 600; margin-bottom: 6px; }
+.book-table figcaption sup.note-mark { font-weight: 400; }
+/* A wide table scrolls inside its box instead of widening the page, with a
+   shadow on each edge that has more of the table past it: the covers
+   scroll with the table and hide the shadows at its ends, which stay with
+   the box */
+.book-table-cells {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  background:
+    linear-gradient(to right, var(--surface) 40%, transparent) left / 24px 100%,
+    linear-gradient(to left, var(--surface) 40%, transparent) right / 24px 100%,
+    radial-gradient(farthest-side at 0 50%, rgb(0 0 0 / 45%), transparent) left / 10px 100%,
+    radial-gradient(farthest-side at 100% 50%, rgb(0 0 0 / 45%), transparent) right / 10px 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+.book-table-cells th, .book-table-cells td {
+  padding: 3px 10px 3px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.book-table-cells th { color: var(--text); font-weight: 600; }
+/* On a phone a table's cells sit closer and a little smaller, so more of
+   its columns fit before it scrolls */
+@media (max-width: 480px) {
+  .book-table { padding: 8px 10px; }
+  .book-table-cells { font-size: 0.9em; }
+  .book-table-cells th, .book-table-cells td { padding: 3px 7px 3px 0; }
+}
+
+/* A picture that is no map with points is a button that opens it full
+   size in a popover over the page, with its caption. It sits above the
+   text's paragraphs, which are positioned for the hover box and would
+   otherwise cover a picture floated beside them */
+.zoom {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.infobox-picture .zoom { width: 100%; }
+.zoom:focus-visible, .zoomed .close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.zoomed {
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  padding: 10px;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+}
+.zoomed::backdrop { background: rgb(0 0 0 / 75%); }
+.zoomed img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 54px);
+  max-height: calc(100dvh - 130px);
+  margin: 0 auto;
+  border-radius: 4px;
+}
+.zoomed p { max-width: 70ch; margin: 8px auto 0; color: var(--text-muted); font-size: 14px; font-style: italic; }
+.zoomed .close {
+  display: block;
+  margin: 0 0 8px auto;
+  padding: 2px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.zoomed .close:hover { color: var(--text); }
+/* --label-font is the face of the names a map's boxes and tags print. The
+   map is a container, so a name box's text sized in cqw scales with it */
+.map {
+  --label-font: "Alegreya Sans", "Myriad Pro", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  position: relative;
+  container-type: inline-size;
+}
+/* A point takes its colours from --fill, --edge and --ink, and its size from
+   --size, so each marker shape below sets only its outline */
+.map .point {
+  --marker: var(--accent);
+  --fill: var(--surface);
+  --edge: var(--border);
+  --ink: var(--text-muted);
+  --size: 20px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: var(--size);
+  padding: 0 5px;
+  border-radius: calc(var(--size) / 2);
+  background: var(--fill);
+  border: 1px solid var(--edge);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: calc(var(--size) - 2px);
+  text-align: center;
+  text-decoration: none;
+}
+.map .point.marker-kind { --marker: var(--kind); }
+/* A name the map prints, which its web copy has painted out, drawn again
+   where it was on a square plate in the books' ink and paper, whatever the
+   preset or the theme. A name that links nothing is dark grey on a pale
+   plate, and one that links the entry it names is white on ink, or on its
+   kind's colour, and turns ink on white while hovered or focused, which
+   no unlinked plate looks like. Only a plate key.js lights from its line
+   of the key has a ring: its own colours in an ink ring, with a white gap
+   between. The page sets each plate's place, its least width, and its text's
+   size and line height, one size for every name on the map; the plate
+   grows wider than its least width when its text needs it, and centres
+   on its place. */
+.map .name-box {
+  --plate-edge: #e4e1dd;
+  --plate: #e4e1dd;
+  --plate-ink: #4d4a47;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: max-content;
+  padding: 0 .4em;
+  translate: -50% 0;
+  background: var(--plate);
+  border: 1px solid var(--plate-edge);
+  color: var(--plate-ink);
+  font-family: var(--label-font);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.map a.name-box { --plate: #231f20; --plate-edge: #231f20; --plate-ink: #fff; }
+.map a.name-box.marker-kind { --plate: var(--kind); --plate-edge: var(--kind); }
+.map a.name-box:is(:hover, :focus-visible) {
+  --plate: #fff;
+  --plate-ink: #231f20;
+  --plate-edge: #231f20;
+  outline: none;
+  z-index: 1;
+}
+.map .name-box.lit { z-index: 1; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #231f20; }
+.map .name-text > span { display: block; }
+.map-view.dragging .name-box { pointer-events: none; }
+.map a.point { --fill: var(--marker); --edge: var(--marker); --ink: var(--bg); }
+.map a.point:hover, .map a.point:focus-visible { --fill: var(--text); --edge: var(--text); }
+.map .point.marker-dot { --size: 12px; min-width: 0; width: var(--size); height: var(--size); padding: 0; box-shadow: 0 0 0 2px var(--bg); }
+.map .point.marker-pin {
+  --size: 22px;
+  width: var(--size);
+  padding: 0;
+  transform: translate(-50%, calc(-100% - 7px));
+}
+.map .point.marker-pin::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-top: 8px solid var(--edge);
+}
+.map .point:is(.marker-diamond, .marker-shield) {
+  --size: 24px;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  line-height: var(--size);
+  box-shadow: none;
+}
+.map .point.marker-diamond { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.map .point.marker-shield { height: calc(var(--size) * 1.15); line-height: calc(var(--size) * .9); clip-path: polygon(0 0, 100% 0, 100% 58%, 50% 100%, 0 58%); }
+.map .point.marker-icon {
+  --size: 26px;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.map .point.marker-icon img { display: block; width: 100%; height: 100%; border-radius: 0; }
+.map .point.marker-icon:is(:hover, :focus-visible) { --size: 34px; filter: drop-shadow(0 0 3px var(--text)); }
+/* Ruin's square is a box like the books' keys, as tall as it is wide
+   whatever its label; gothic's seal is a disc in a double ring, as a seal
+   in wax */
+.map .point.marker-square {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  aspect-ratio: 1;
+  padding: 0 2px;
+  border-radius: 0;
+  box-shadow: 0 0 0 2px var(--bg);
+}
+.map .point.marker-seal {
+  --size: 26px;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 3px double var(--bg);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--edge);
+  line-height: calc(var(--size) - 6px);
+}
+/* The point key.js lights from its line of the key: its own shape and size
+   in the books' ink, with its label in white, as a locator's marker, and
+   above the .key-callout that key.js puts at its centre. The callout draws
+   a locator's line and tag, in the same colours whatever the preset or the
+   scheme: up and to the right, to the left with .tag-start and down with
+   .tag-below, --reach from the centre each way, above every name box. A
+   seal keeps its outer ring, and an icon its own colours in a paper glow. */
+.map .point.lit {
+  --fill: #231f20;
+  --edge: #231f20;
+  --ink: #fff;
+  z-index: 3;
+}
+.map .point.lit:not(.marker-seal) { box-shadow: none; }
+.map .point.marker-icon.lit { filter: drop-shadow(0 0 1.5px #f4efe6) drop-shadow(0 0 1.5px #f4efe6); }
+.map .key-callout {
+  --locator-ink: #231f20;
+  --locator-paper: #f4efe6;
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+.map .key-callout::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--reach) * 1.414);
+  height: 2px;
+  margin-top: -1px;
+  background: var(--locator-ink);
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+.map .key-callout.tag-start::before { transform: rotate(-135deg); }
+.map .key-callout.tag-below::before { transform: rotate(45deg); }
+.map .key-callout.tag-start.tag-below::before { transform: rotate(135deg); }
+.map .key-callout.tag-start .locator-tag { left: auto; right: calc(50% + var(--reach)); }
+.map .key-callout.tag-below .locator-tag { bottom: auto; top: calc(50% + var(--reach)); }
+.map-view.dragging .key-callout { display: none; }
+/* The book's key text for a point, which shows beside it when it is hovered
+   or focused on a map's page */
+.map .point-key {
+  --tip-x: -50%;
+  --tip-y: calc(-100% - 18px);
+  position: absolute;
+  z-index: 3;
+  display: none;
+  width: max-content;
+  max-width: 240px;
+  padding: 3px 8px;
+  transform: translate(var(--tip-x), var(--tip-y));
+  background: var(--text);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 25%);
+  color: var(--bg);
+  font-size: 13px;
+  line-height: 1.35;
+  pointer-events: none;
+}
+.map .point:is(:hover, :focus-visible) + .point-key { display: block; }
+/* Where previews.js runs, its card shows the entry or the point's name instead */
+.previews .map .point:is(:hover, :focus-visible) + .point-key { display: none; }
+.map .point-key.below { --tip-y: 18px; }
+.map .point-key.start { --tip-x: -14px; }
+.map .point-key.end { --tip-x: calc(-100% + 14px); }
+.map .point.marker-pin + .point-key:not(.below) { --tip-y: calc(-100% - 44px); }
+.map .point.marker-pin + .point-key.below { --tip-y: 8px; }
+.map-view.dragging .point-key { display: none; }
+/* A locator map's one marker: an ink square at the entry's place, and the
+   place's name as written on an ink tag up and to its right, in the name
+   boxes' face, joined to the square by a short ink line. Its colours are
+   the books' maps', so every preset and scheme keeps them. The tag goes to
+   the square's left with .tag-start and under it with .tag-below, the line
+   with it, --reach from the square's centre on each side. An icon keeps
+   its own colours, in a paper glow, with the same line and tag. */
+.map .point.locator {
+  --locator-ink: #231f20;
+  --locator-paper: #f4efe6;
+  --size: 13px;
+  --reach: calc(var(--size) / 2 + 8px);
+  min-width: 0;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--locator-ink);
+  box-shadow: none;
+}
+.map .point.locator::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--reach) * 1.414);
+  height: 2px;
+  margin-top: -1px;
+  background: var(--locator-ink);
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+.map .point.locator.tag-start::before { transform: rotate(-135deg); }
+.map .point.locator.tag-below::before { transform: rotate(45deg); }
+.map .point.locator.tag-start.tag-below::before { transform: rotate(135deg); }
+.map .locator-tag {
+  position: absolute;
+  left: calc(50% + var(--reach));
+  bottom: calc(50% + var(--reach));
+  padding: 3px 6px;
+  background: var(--locator-ink);
+  color: var(--locator-paper);
+  font: 600 12px/1 var(--label-font);
+  white-space: nowrap;
+}
+.map .point.locator.tag-start .locator-tag { left: auto; right: calc(50% + var(--reach)); }
+.map .point.locator.tag-below .locator-tag { bottom: auto; top: calc(50% + var(--reach)); }
+.map .point.locator.marker-icon {
+  --size: 28px;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.map .point.locator.marker-icon img {
+  filter: drop-shadow(0 0 1.5px var(--locator-paper)) drop-shadow(0 0 1.5px var(--locator-paper));
+}
+.points { columns: 2; margin: 10px 0 0; padding-left: 0; list-style: none; font-size: 14px; }
+.points .label { display: inline-block; min-width: 26px; color: var(--muted); }
+/* A key split in the map's numbered places and the names printed on it,
+   side by side under headings in small capitals: the places in as many
+   columns as fit, the names in one */
+.key-groups { display: grid; grid-template-columns: 3fr 1fr; gap: 0 32px; margin: 10px 0 0; }
+.key-groups .points { margin: 0; }
+.key-group.places .points { columns: 10rem; }
+.key-group.regions .points { columns: 1; }
+.key-heading {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.open-map { margin: 6px 0 0; font-size: 14px; }
+
+/* A map's own page: the whole map, which map.js makes a box to zoom and pan */
+
+main.map-page { max-width: 1400px; }
+/* The line under the title that links back to the entry the map is of */
+.map-entry { margin: 4px 0 0; font-size: 16px; }
+/* map.js sets the map's width over its height as --ratio and adds .shaped:
+   the box is then the map's own shape, as large as fits, and the key sits
+   beside it when there is room and under it when not. It marks the first
+   with .key-beside, and the key then scrolls beside the map. */
+.map-layout { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 28px; --map-height: min(78vh, 1000px); }
+.map-layout > .map-view { flex: 1 1 100%; }
+.map-layout.shaped > .map-view { flex: 0 1 auto; width: min(100%, calc(var(--map-height) * var(--ratio))); }
+.map-layout > .points { flex: 1 1 15rem; margin: 0 0 18px; columns: 13rem; }
+.map-layout.key-beside > .points { columns: 1; max-height: var(--view-height); overflow-y: auto; }
+.map-layout > .key-groups { flex: 1 1 15rem; margin: 0 0 18px; }
+.map-layout.key-beside > .key-groups { grid-template-columns: 1fr; gap: 14px; max-height: var(--view-height); overflow-y: auto; }
+.map-layout.key-beside > .key-groups .points { columns: 1; }
+.map-bar { display: flex; gap: 6px; margin: 0 0 8px; }
+.map-bar[hidden] { display: none; }
+.map-bar button {
+  min-width: 30px;
+  padding: 3px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.map-bar button:hover { color: var(--text); border-color: var(--muted); }
+.map-view { margin: 0 0 18px; }
+.map-view img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.map-view.zoomable {
+  position: relative;
+  aspect-ratio: var(--ratio);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: grab;
+  touch-action: pan-x pan-y;
+  overscroll-behavior: contain;
+}
+.map-view.zoomable:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.map-view.zoomable .map { margin: 0 auto; }
+.map-view.zoomable img { max-width: none; border-radius: 0; -webkit-user-drag: none; user-select: none; }
+.map-view.dragging { cursor: grabbing; }
+.map-view.dragging .point { pointer-events: none; }
+.book-maps ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  padding: 0;
+  list-style: none;
+}
+.book-maps a { display: block; }
+.book-maps img { display: block; width: 100%; height: 140px; object-fit: cover; margin-bottom: 4px; border: 1px solid var(--border); border-radius: 6px; }
+
+/* Ruin's furniture: square boxes, titles in capitals, links in the ink
+   colour with a rule under them, and a fact box on the page's paper */
+
+body.preset-ruin { font-size: 17px; }
+body.preset-ruin h1, body.preset-ruin .site-title { text-transform: uppercase; letter-spacing: .01em; }
+body.preset-ruin h1 { font-size: 42px; line-height: 1.05; }
+body.preset-ruin .sidebar .site-title { font-size: 22px; }
+body.preset-ruin .start .opener { --title-glyph: .58; }
+body.preset-ruin .body :is(h2, h3, h4, h5, h6) { text-transform: uppercase; letter-spacing: .03em; }
+/* Links are in the ink colour, so every link in the column carries its
+   rule, except those drawn as boxes or letters */
+body.preset-ruin main a:not(.graph-preview, .kinds a, .letters a, .note-mark a, .running-book, .map a) {
+  text-decoration: underline 1px;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 3px;
+}
+body.preset-ruin main a:not(.graph-preview, .kinds a, .letters a, .note-mark a, .running-book, .map a):hover { text-decoration-color: currentColor; }
+body.preset-ruin .infobox { background: var(--bg); border: 0; border-bottom: 3px solid var(--rule); }
+body.preset-ruin .infobox-head { font-size: 19px; letter-spacing: .03em; }
+body.preset-ruin .running-head { border-image: linear-gradient(to right, var(--rule), var(--stripe)) 1; }
+body.preset-ruin :is(.kinds li, .kinds a, .graph-preview, .graph-panel, .graph-fit, .graph-legend button, .search input, .search-panel, .search .filters button, .search .results, .search .results a, .sidebar a.on, .sidebar .navlink, .sidebar .kind-link, .group-by select, .contents, .page-preview, .menu-button, .letters a, .skip) { border-radius: 0; }
+body.preset-ruin :is(.contents, .page-preview) { border-top: 3px solid var(--rule); }
+body.preset-ruin .page-preview-title { font-family: var(--title-font); font-weight: var(--title-weight); text-transform: uppercase; letter-spacing: .02em; }
+body.preset-ruin .contents summary { text-transform: uppercase; letter-spacing: .06em; }
+/* A map's points are drawn as the books' are, in the text face's bold: an
+   entry's in black with white figures, turning white while hovered, the
+   others dark grey on a pale plate as the map's unlinked names are, and no
+   halo. The colours are the map's, so the dark scheme keeps them; a point
+   in its kind's colour keeps that */
+body.preset-ruin .map .point {
+  font-family: var(--text-font);
+  font-size: 13px;
+  font-weight: 700;
+}
+body.preset-ruin .map .point.marker-square:not(.lit) { box-shadow: none; }
+body.preset-ruin .map span.point:not(.locator, .lit) { --fill: #e4e1dd; --edge: #e4e1dd; --ink: #4d4a47; }
+body.preset-ruin .map a.point:not(.marker-kind) { --fill: #231f20; --edge: #231f20; --ink: #fff; }
+body.preset-ruin .map a.point:is(:hover, :focus-visible) { --fill: #fff; --edge: #231f20; --ink: #231f20; }
+body.preset-ruin .map .point-key { border-radius: 0; }
+body.preset-ruin .source-page h3 { text-transform: uppercase; letter-spacing: .03em; }
+
+/* Gothic's furniture: double rules, a red drop cap in the text's face, small-capital
+   headings, and titles in blackletter but never in capitals, which
+   blackletter cannot be read in */
+
+body.preset-gothic { font-size: 18px; }
+body.preset-gothic h1 { font-size: 46px; line-height: 1.1; }
+body.preset-gothic .sidebar .site-title { font-size: 24px; }
+body.preset-gothic .start .opener h1 { text-transform: none; letter-spacing: 0; }
+body.preset-gothic .start .opener { --title-glyph: .5; border-bottom: 6px double var(--rule); }
+body.preset-gothic .book-head { border-bottom: 4px double var(--rule); }
+body.preset-gothic .book-label { font-variant: small-caps; text-transform: none; letter-spacing: .06em; font-size: 15px; color: var(--accent); }
+body.preset-gothic :is(.body :is(h2, h3, h4, h5, h6), .connections-heading, .source-page h3) {
+  font-variant: small-caps;
+  letter-spacing: .04em;
+  color: var(--accent);
+}
+body.preset-gothic :is(.contents, .page-preview) { border-top: 4px double var(--rule); }
+body.preset-gothic .page-preview-title { font-family: var(--title-font); font-weight: var(--title-weight); font-size: 20px; }
+body.preset-gothic .contents summary { font-variant: small-caps; letter-spacing: .04em; color: var(--accent); }
+/* A map's points in the text face, an entry's in red and the others
+   outlined in it */
+body.preset-gothic .map .point { font-family: var(--text-font); font-size: 14px; font-weight: 600; }
+body.preset-gothic .map span.point:not(.locator, .lit) { --fill: var(--bg); --edge: var(--accent); --ink: var(--accent); }
+body.preset-gothic .map .point-key { border-radius: 2px; }
+body.preset-gothic .infobox-head { font-size: 22px; letter-spacing: 0; text-transform: none; padding: 4px 12px 2px; }
+body.preset-gothic .running-head { border-image: none; border-color: var(--rule); border-style: double; border-width: 4px 0 0; }
+body.preset-gothic .body > p:first-of-type::first-letter {
+  float: left;
+  padding: 4px 8px 0 0;
+  color: var(--accent);
+  font-size: 3.4em;
+  font-weight: 400;
+  line-height: .8;
+}
+
+/* The books' setting of text, for ruin and gothic: paragraphs with no
+   space between them, each after the first in a run indented, a rule down
+   the column's outer edge on wide screens, and the running head's bar
+   again at the foot of an entry's page, fading the other way */
+
+body:is(.preset-ruin, .preset-gothic) .body p { margin-bottom: 0; }
+body:is(.preset-ruin, .preset-gothic) .body p + p,
+body:is(.preset-ruin, .preset-gothic) .body p + .picture + p,
+body:is(.preset-ruin, .preset-gothic) .body p + .picture + .picture + p { text-indent: 1.5em; }
+/* Pictures framed as the presets frame their infobox: ruin under a heavy
+   rule on the page's own white, gothic in a double line */
+body.preset-ruin .picture { padding: 0 0 4px; background: var(--bg); border: 0; border-bottom: 3px solid var(--rule); border-radius: 0; }
+body.preset-ruin .picture img { border-radius: 0; }
+body.preset-ruin .picture figcaption { padding: 6px 0 0; font-size: 14px; }
+body.preset-gothic .picture { padding: 4px; border: 3px double var(--border); border-radius: 0; }
+body.preset-gothic .picture img { border-radius: 0; }
+body.preset-gothic .picture figcaption { font-size: 15px; font-style: italic; text-align: center; }
+body:is(.preset-ruin, .preset-gothic) .body p:has(> .main:first-child) + p { text-indent: 0; }
+body:is(.preset-ruin, .preset-gothic) .body :is(h2, h3, h4, h5, h6) + p,
+body:is(.preset-ruin, .preset-gothic) .body .contents + p { margin-top: 0; }
+body:is(.preset-ruin, .preset-gothic) .body .contents { margin-top: 18px; }
+body:is(.preset-ruin, .preset-gothic) main:has(> .running-head)::after {
+  content: "";
+  display: block;
+  margin-top: 44px;
+}
+body.preset-ruin main:has(> .running-head)::after {
+  height: var(--head-bar);
+  background: linear-gradient(to left, var(--rule), var(--stripe));
+}
+body.preset-gothic main:has(> .running-head)::after { border-top: 4px double var(--rule); }
+
+@media screen and (min-width: 761px) {
+  body.preset-ruin main { border-right: 3px solid var(--rule); }
+  body.preset-gothic main { border-right: 4px double var(--rule); }
+}
+
+/* Phones: a top bar with the site's title and a menu button, a checkbox
+   whose label opens the sidebar over the page */
+
+.menu-toggle { position: absolute; opacity: 0; pointer-events: none; }
+.topbar { display: none; }
+
+@media (max-width: 760px) {
+  .wrap { display: block; }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    height: 48px;
+    padding: 0 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar .site-title {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text);
+    font-size: 17px;
+    font-weight: var(--title-weight);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .menu-button {
+    flex: none;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .topbar:has(.menu-toggle:checked) .menu-button { background: var(--border); color: var(--text); }
+  .topbar:has(.menu-toggle:focus-visible) .menu-button { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 35;
+    height: auto;
+    border-right: 0;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+  }
+  .wrap:has(.menu-toggle:checked) .sidebar { display: block; }
+  .sidebar .site-title { display: none; }
+  main { padding: 18px 16px 40px; overflow-wrap: break-word; }
+  .running-head { flex-wrap: wrap; }
+  .title-line { column-gap: 12px; }
+  .gm-only-tag { max-width: 15em; padding: 2px 6px; font-size: 12px; line-height: 1.3; }
+  /* Both bars fit in the column's padding: the visibility bar 14px left of
+     the text, the provenance bar 8px */
+  main:has(.visibility-toggle:checked) .body > :is(p, h2, h3, h4, h5, h6) { margin-left: -8px; padding-left: 5px; }
+  main:has(.visibility-toggle:checked) .body > :is(p, h2, h3, h4, h5, h6):is(.gm, .part-gm)::before { left: -9px; }
+  main:has(.visibility-toggle:checked) p.description.gm::before { left: -14px; }
+  .running-head :is(.provenance, .visibility-view) { width: 100%; min-width: 0; }
+  .running-head .legend {
+    position: static;
+    flex: 1 1 100%;
+    flex-wrap: nowrap;
+    min-width: 0;
+    margin: 0;
+    overflow-x: auto;
+    justify-content: flex-start;
+    white-space: nowrap;
+  }
+  .infobox { float: none; width: 100%; margin: 0 0 18px; overflow-wrap: anywhere; }
+  .source-page { display: flex; flex-direction: column; }
+  .source-page .book-head { order: -1; }
+  .book-cover img { width: auto; max-width: 100%; max-height: 360px; margin: 0 auto; }
+  .picture.lead, .picture.thumb { float: none; width: auto; max-width: 100%; margin: 0 0 18px; }
+  .picture.thumb { width: 100%; max-width: 320px; margin: 4px auto 18px; }
+  .points { columns: 1; }
+  .key-groups { grid-template-columns: 1fr; gap: 14px; }
+  .key-group.places .points { columns: 1; }
+  .connections dd, .notes { overflow-wrap: anywhere; }
+  .entry-list td:nth-child(2) { white-space: normal; }
+  .search-panel { position: static; max-height: none; box-shadow: none; }
+  .connections div { grid-template-columns: 1fr; gap: 0; }
+  .start .start-top { display: block; }
+  .session-nav { grid-template-columns: 1fr 1fr; }
+  .session-nav .all { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
+  .graph-preview { margin-top: 18px; }
+  .graph-page .graph { min-height: 240px; }
+  .graph-panel { position: static; width: auto; margin-top: 8px; }
+}
+
+/* Print: an entry on paper for the table, black on white whatever the
+   preset, without what only works on a screen. The tokens are !important
+   so they also win over the colours a vault sets in its page's <style>.
+   An entry page names itself and the site in the page's margin. */
+
+@page {
+  margin: 18mm 16mm;
+  @top-left { font: 9pt var(--text-fallback, sans-serif); color: #444; }
+  @top-right { font: 9pt var(--text-fallback, sans-serif); color: #444; }
+  @bottom-right { content: counter(page); font: 9pt sans-serif; color: #444; }
+}
+
+@media print {
+  body, body.preset-ruin, body.preset-gothic {
+    color-scheme: light;
+    --bg: #fff !important;
+    --surface: #fff !important;
+    --border: #999 !important;
+    --muted: #444 !important;
+    --text-muted: #222 !important;
+    --text: #000 !important;
+    --accent: #000 !important;
+    --link: #000 !important;
+    --box-head: #fff !important;
+    --box-head-text: #000 !important;
+    --stripe: #eee !important;
+    --rule: #000 !important;
+    font-size: 11pt;
+    background: #fff;
+    color: #000;
+  }
+  .sidebar, .search, .running-head, .provenance, .visibility-view, .layer-switch, .group-by, .page-preview,
+  .topbar, .contents, .graph, .graph-preview, .graph-panel, .graph-legend,
+  .letters { display: none !important; }
+  [data-description]:hover::after { content: none !important; }
+  .segment.corrected > .book, .note-tip { display: none !important; }
+  .wrap { display: block; min-height: 0; }
+  main { max-width: none; padding: 0; }
+  a, body.preset-ruin :is(.body, .infobox, .connections, .crumbs) a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .body p, .body :is(h2, h3, h4, h5, h6) { border-left: 0; padding-left: 0; margin-left: 0; }
+  main:has(.provenance-toggle:checked) :is(.body p.mixed, .infobox) .segment { text-decoration: none; }
+  main:has(.visibility-toggle:checked) :is(.body > :is(p, h2, h3, h4, h5, h6), p.description, figure)::before { content: none !important; }
+  main:has(.visibility-toggle:checked) :is(.segment.gm, .connections a.gm) { padding-bottom: 0 !important; background: none !important; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid; page-break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  .infobox {
+    width: 38%;
+    margin: 0 0 12pt 16pt;
+    border: 1px solid #000;
+    font-size: 9.5pt;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .infobox-head { border-bottom: 1px solid #000; }
+  .connections div, .notes li { break-inside: avoid; page-break-inside: avoid; }
+  body.preset-gothic .body > p:first-of-type::first-letter { color: #000; }
+}
