@@ -491,6 +491,9 @@ h3, h4, h5, h6 { font-size: 18px; margin: 22px 0 6px; }
   text-align: left;
 }
 .infobox th { color: var(--muted); font-weight: 400; width: 40%; }
+/* A field's several values, such as a line of rulers, one a bullet */
+.infobox ul.values { margin: 0; padding-left: 1.1em; }
+.infobox ul.values li + li { margin-top: 2px; }
 
 sup.note-mark { font-size: 11px; line-height: 0; }
 sup.note-mark a { color: var(--muted); }
@@ -828,6 +831,23 @@ body.preset-ruin .layer-switch .layers { border-radius: 0; }
 }
 main:has(.visibility-toggle:checked) .gm-only-tag:not([hidden]) { display: block; }
 body.preset-ruin .gm-only-tag { border-radius: 0; }
+/* The tag of an entry with no game master piece, in the legend's public
+   swatch: outlined, not tinted. A page only the game master layer has, such
+   as an entry known only by its place on a map, takes the gm tag instead. */
+.public-tag {
+  display: none;
+  max-width: 17em;
+  margin: 0;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.35;
+}
+main:has(.visibility-toggle:checked) .public-tag { display: block; }
+main .gm-only-tag:not([hidden]) ~ .public-tag { display: none; }
+body.preset-ruin .public-tag { border-radius: 0; }
 
 /* The visibility view on a game master page: a switch like the provenance
    one that marks the text only the game master may read, and shows each
@@ -1392,7 +1412,7 @@ ol.reports p, .sessions-page .campaign p { margin: 2px 0 0; color: var(--text-mu
   border-radius: 4px;
 }
 .picture img { display: block; max-width: 100%; height: auto; border-radius: 2px; }
-.picture:is(.lead, .thumb) .zoom, .picture:is(.lead, .thumb) .zoom img { width: 100%; }
+.picture:is(.lead, .thumb, .wide) .zoom, .picture:is(.lead, .thumb, .wide) .zoom img { width: 100%; }
 .picture figcaption {
   padding: 6px 3px 1px;
   color: var(--text-muted);
@@ -1407,6 +1427,9 @@ ol.reports p, .sessions-page .campaign p { margin: 2px 0 0; color: var(--text-mu
    Wikipedia, under the infobox if they meet. Its top lines up with the
    paragraph's first line */
 .picture.thumb { float: right; clear: right; width: 250px; margin: 5px 0 14px 24px; }
+/* A wide picture spans the text column, or the room beside the infobox
+   where it meets it, since it starts its own block */
+.picture.wide { display: flow-root; margin: 5px 0 18px; }
 .body .picture p { margin: 0; padding-left: 0; border-left: 0; text-align: left; }
 .picture .open-map { padding: 6px 3px 1px; }
 .pictures { clear: both; }
@@ -1800,12 +1823,15 @@ main.map-page { max-width: 1400px; }
 /* map.js sets the map's width over its height as --ratio and adds .shaped:
    the box is then the map's own shape, as large as fits, and the key sits
    beside it when there is room and under it when not. It marks the first
-   with .key-beside, and the key then scrolls beside the map. */
+   with .key-beside, and the key then scrolls beside the map. A key beside
+   the map has no columns: a multi-column box of a set height lays what
+   does not fit in new columns to the side, past its edge, instead of
+   scrolling down to it. */
 .map-layout { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 28px; --map-height: min(78vh, 1000px); }
 .map-layout > .map-view { flex: 1 1 100%; }
 .map-layout.shaped > .map-view { flex: 0 1 auto; width: min(100%, calc(var(--map-height) * var(--ratio))); }
 .map-layout > .points { flex: 1 1 15rem; margin: 0 0 18px; columns: 13rem; }
-.map-layout.key-beside > .points { columns: 1; max-height: var(--view-height); overflow-y: auto; }
+.map-layout.key-beside > .points { columns: auto; max-height: var(--view-height); overflow-y: auto; }
 .map-layout > .key-groups { flex: 1 1 15rem; margin: 0 0 18px; }
 .map-layout.key-beside > .key-groups { grid-template-columns: 1fr; gap: 14px; max-height: var(--view-height); overflow-y: auto; }
 .map-layout.key-beside > .key-groups .points { columns: 1; }
@@ -1850,6 +1876,30 @@ main.map-page { max-width: 1400px; }
 }
 .book-maps a { display: block; }
 .book-maps img { display: block; width: 100%; height: 140px; object-fit: cover; margin-bottom: 4px; border: 1px solid var(--border); border-radius: 6px; }
+
+/* The Pictures and Maps pages: a grid of whole pictures, each over its
+   caption and the entries linked to it */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 22px 18px;
+  padding: 0;
+  list-style: none;
+}
+.gallery-picture { display: block; }
+.gallery-picture img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.gallery-caption { margin: 6px 0 2px; font-size: 14px; line-height: 1.35; }
+.gallery-entries { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+body.preset-ruin .gallery-picture img { border-radius: 0; }
 
 /* Ruin's furniture: square boxes, titles in capitals, links in the ink
    colour with a rule under them, and a fact box on the page's paper */
@@ -2024,6 +2074,9 @@ body.preset-gothic main:has(> .running-head)::after { border-top: 4px double var
   .running-head { flex-wrap: wrap; }
   .title-line { column-gap: 12px; }
   .gm-only-tag { max-width: 15em; padding: 2px 6px; font-size: 12px; line-height: 1.3; }
+  .public-tag { max-width: 15em; padding: 1px 5px; font-size: 12px; line-height: 1.3; }
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .gallery-picture img { height: 130px; }
   /* Both bars fit in the column's padding: the visibility bar 14px left of
      the text, the provenance bar 8px */
   main:has(.visibility-toggle:checked) .body > :is(p, h2, h3, h4, h5, h6) { margin-left: -8px; padding-left: 5px; }
@@ -2046,6 +2099,11 @@ body.preset-gothic main:has(> .running-head)::after { border-top: 4px double var
   .book-cover img { width: auto; max-width: 100%; max-height: 360px; margin: 0 auto; }
   .picture.lead, .picture.thumb { float: none; width: auto; max-width: 100%; margin: 0 0 18px; }
   .picture.thumb { width: 100%; max-width: 320px; margin: 4px auto 18px; }
+  /* A map at an entry's top spans the screen, so one taller than it is
+     wide is cut to a square. The cut keeps its place's share of the map's
+     height, --at, at the same share of the square's, where its marker sits */
+  .map-picture .map-link { container-type: inline-size; }
+  .map-picture .map-link img { width: 100%; max-height: 100cqw; object-fit: cover; object-position: var(--at, 50% 50%); }
   .points { columns: 1; }
   .key-groups { grid-template-columns: 1fr; gap: 14px; }
   .key-group.places .points { columns: 1; }
